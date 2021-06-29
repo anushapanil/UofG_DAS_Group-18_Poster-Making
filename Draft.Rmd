@@ -4,7 +4,10 @@ author: "anushapanil"
 date: "28/06/2021"
 output: 
   pdf_document:
-   number_sections: yes
+    latex_engine: pdflatex
+    number_sections: yes
+  html_document:
+    df_print: paged
 fig_caption: yes
 ---
 
@@ -29,6 +32,8 @@ library(gridExtra)
 library(readr)
 library(kableExtra)
 library(olsrr)
+library(ggfortify)
+library(ggpubr)
 ```
 
 
@@ -37,11 +42,11 @@ body_fat <- read_csv("Body Fat Prediction Dataset.csv")
 
 ```
 
-```{r ggpairs, out.width="75%", fig.align="center", fig.pos="H", fig.cap="\\label{fig:ggpairs} Correlation Plot"}
+```{r ggpairs, out.width="100%", fig.align="center", fig.pos="H", fig.cap="\\label{fig:ggpairs} Correlation Plot"}
 body_fat %>% ggpairs()
 ```
 There is a strong positive correlation between all the variables, which implies that there is high multicollinearity. So, it will be better to use variable selection method to remove multicollinearity.
-
+\
 Let's take a look at the summary of our data.
 
 ```{r summary}
@@ -55,6 +60,7 @@ body_fat %>%
 
 ```
 
+
 Since all the variables are in the same range, we shall look at the individual relationships between each explanatory variable and the response variable.
 
 ```{r plots}
@@ -62,250 +68,146 @@ p1 <- ggplot(body_fat, aes(x = Age, y = BodyFat)) +
   geom_point() +
   labs(x = "Age", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p1
 
 p2 <- ggplot(body_fat, aes(x = Weight, y = BodyFat)) +
   geom_point() +
   labs(x = "Weight", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p2
 
 p3 <- ggplot(body_fat, aes(x = Height, y = BodyFat)) +
   geom_point() +
   labs(x = "Height", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p3
 
 p4 <- ggplot(body_fat, aes(x = Neck, y = BodyFat)) +
   geom_point() +
   labs(x = "Neck", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p4
 
 p5 <- ggplot(body_fat, aes(x = Chest, y = BodyFat)) +
   geom_point() +
   labs(x = "Chest", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p5
 
 p6 <- ggplot(body_fat, aes(x = Abdomen, y = BodyFat)) +
   geom_point() +
   labs(x = "Abdomen", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p6
 
 p7 <- ggplot(body_fat, aes(x = Hip, y = BodyFat)) +
   geom_point() +
   labs(x = "Hip", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p7
 
 p8 <- ggplot(body_fat, aes(x = Thigh, y = BodyFat)) +
   geom_point() +
   labs(x = "Thigh", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p8
 
 p9 <- ggplot(body_fat, aes(x = Knee, y = BodyFat)) +
   geom_point() +
   labs(x = "Knee", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p9
 
 p10 <- ggplot(body_fat, aes(x = Ankle, y = BodyFat)) +
   geom_point() +
   labs(x = "Ankle", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p10
 
 p11 <- ggplot(body_fat, aes(x = Biceps, y = BodyFat)) +
   geom_point() +
   labs(x = "Biceps", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p11
 
 p12 <- ggplot(body_fat, aes(x = Forearm, y = BodyFat)) +
   geom_point() +
   labs(x = "Forearm", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p12
 
 p13 <- ggplot(body_fat, aes(x = Wrist, y = BodyFat)) +
   geom_point() +
   labs(x = "Wrist", y = "Body Fat") +
   geom_smooth(method = "lm", se = F)
-p13
 grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, nrow = 4)
 ```
 After plotting the relationship between the variables, we observe that there is indeed a good positive relationship between most of them except one of the explanatory variables. The plot between Height and BodyFat shows us that they have a very weak relationship between them. There are some influencer points in some of the plots, which we can try to eliminate to improve the model.
 
-We are trying to find and remove the outliers to see if it makes the model any better.
-```{r}
-outliers <- sapply(body_fat, function(x){which(x %in% boxplot.stats(x)$out)})
-outliers_unlisted <- sort(unique(unlist(outliers)))
-body_fat_updated <- body_fat[-outliers_unlisted,]
-```
-
-Let's look at the relationships between the explanatory variables and the response variable after eliminating the outliers
-
-```{r}
-p1 <- ggplot(body_fat_updated, aes(x = Age, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Age", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p1
-
-p2 <- ggplot(body_fat_updated, aes(x = Weight, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Weight", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p2
-
-p3 <- ggplot(body_fat_updated, aes(x = Height, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Height", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p3
-
-p4 <- ggplot(body_fat_updated, aes(x = Neck, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Neck", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p4
-
-p5 <- ggplot(body_fat_updated, aes(x = Chest, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Chest", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p5
-
-p6 <- ggplot(body_fat_updated, aes(x = Abdomen, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Abdomen", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p6
-
-p7 <- ggplot(body_fat_updated, aes(x = Hip, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Hip", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p7
-
-p8 <- ggplot(body_fat_updated, aes(x = Thigh, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Thigh", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p8
-
-p9 <- ggplot(body_fat_updated, aes(x = Knee, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Knee", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p9
-
-p10 <- ggplot(body_fat_updated, aes(x = Ankle, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Ankle", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p10
-
-p11 <- ggplot(body_fat_updated, aes(x = Biceps, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Biceps", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p11
-
-p12 <- ggplot(body_fat_updated, aes(x = Forearm, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Forearm", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p12
-
-p13 <- ggplot(body_fat_updated, aes(x = Wrist, y = BodyFat)) +
-  geom_point() +
-  labs(x = "Wrist", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
-p13
-grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, nrow = 4)
-```
-After removing the outlier points, we come to the conclusion, that there is no major significant change to the plots.
-
-So firstly, we shall try to fit the model taking all the predictor variables and the response variable into consideration.
+But, let's first try to find a good model fit, taking all the predictor variables and the response variable into consideration.
 
 ```{r models}
 prediction_model <- lm(BodyFat ~ Age + Weight + Height + Neck +Chest + Abdomen + Hip + Thigh + Knee + Ankle + Biceps + Forearm + Wrist, data = body_fat)
 
-get_regression_table(model = prediction_model) %>% kable() %>%
+#model_selection_1 <- ols_step_all_possible(prediction_model)
+
+model_selection_2 <- ols_step_both_aic(prediction_model)
+model_selection_2
+
+model_selection_3 <- ols_step_both_p(prediction_model)
+model_selection_3 
+```
+By doing feature selection using **olsrr** library like AIC criterion, p-values and also looking at all possible model combinations, we end up with a result comprising of 4 explanatory variables, as you can see in step-wise selection tables.
+
+
+we can infer that **Abdomen**, **Weight** and **Wrist** effectively describes all the effect on the response variable by providing a good $R^2$ value.  
+
+```{r Model Selection 1, echo=FALSE}
+lm_1 <- lm(BodyFat ~ Abdomen+Weight+Wrist+Forearm+Neck, data = body_fat)
+get_regression_table(lm_1) %>%
+  kable(caption = "\\label{tab: model_par_table} Table 1") %>%
+  kable_styling(font_size = 10, latex_options = "hold_position") %>%
+  kable_styling(latex_options = "striped")
+```
+
+As we can see from model1, the p-value of our predictor, Neck is insignificant. So, we shall drop it. Now, let's try fitting models without this variable.
+
+```{r Model Selection 2, echo=FALSE}
+lm_2 <- lm(BodyFat ~ Abdomen+Weight+Wrist+Forearm, data = body_fat)
+lm_3 <- lm(BodyFat ~ Abdomen+Weight+Wrist, data = body_fat)
+
+summary_1 <- glance(lm_2)[,c(1,2,8,9)]
+summary_2 <- glance(lm_3)[,c(1,2,8,9)]
+summary_table <- rbind(summary_1,summary_2) %>% mutate(Model = c(2:3)) %>% relocate(Model)
+
+summary_table %>% 
+  kable(booktabs = T, col.names = c("Model", "R2", "Adj_R2", "AIC", "BIC"), digits = 4, align = 'c') %>%
+  kable_styling(latex_options = "striped", font_size = 14) %>%
   kable_styling(latex_options = "HOLD_position")
-```
-As we can see from the above table, the p-values are quite high. This is due to high multicollinearity. To tackle this problem, we shall use AIC criterion to perform feature selection.
-
-```{r Model Selection, echo=FALSE}
-
-model_selection <- ols_step_both_aic(prediction_model, details = T)
 
 ```
+In the above tables, we can observe the results of two models. In model2, we have dropped Neck but after comparing the $R^2$, we see that Forearm doesn't contribute much. So, we end up with model3, having only 3 predictors, Abdomen, Weight and Wrist. The results of model3 are given below.
 
-After performing AIC, we observe that most of the p-values except that of Hip are significant, which is good. So, we shall remove the variable, Hip to improve our model.
-
-```{r selected model}
-selected_body_fat_model <- lm(BodyFat ~ Abdomen+Weight+Wrist+Forearm, data = body_fat)
-summary(selected_body_fat_model)
-
-get_regression_table(selected_body_fat_model) %>%
-  select(term, estimate, p_value) %>%
-  kable(caption = "\\label{tab: model_par_table} Estimates of parameters from fitted model") %>%
-  kable_styling(font_size = 10, latex_options = "hold_position")
+```{r}
+get_regression_table(lm_3) %>%
+  kable(caption = "\\label{tab: model_par_table} Table 1") %>%
+  kable_styling(font_size = 10, latex_options = "hold_position") %>%
+  kable_styling(latex_options = "striped")
 ```
+
 The model seems pretty good.
 Now, let us assess the model fit.
-```{r}
-regression.points <- get_regression_points(selected_body_fat_model)
+
+```{r Residual, echo=FALSE, out.height="60%"}
+autoplot(lm_3)
 ```
-We can assess our first two model assumptions by producing scatterplots of our residuals against each of our explanatory variables. First, let’s begin with the scatterplot of the residuals against Abdomen
+The above residual graphs look good but if we take a look at the Residuals vs Leverage plot, we can see an outlier. Let's try removing it and observe the changes.
 
 ```{r}
-ggplot(regression.points, aes(x = Abdomen, y = residual)) +
-  geom_point() +
-  labs(x = "Abdomen Size (in $)", y = "Residual", title = "Residuals vs Abdomen Size")  +
-  geom_hline(yintercept = 0, col = "blue", size = 1) +
-  geom_smooth(method = "lm", se = F, col = "red", linetype = "dashed")
+body_fat_updated <- body_fat[-39,]
+lm_3_updated <- lm(BodyFat ~ Abdomen+Weight+Wrist, data = body_fat_updated)
+autoplot(lm_3_updated)
 ```
-Now, let’s plot a scatterplot of the residuals against Weight:
 
-```{r}
-ggplot(regression.points, aes(x = Weight, y = residual)) +
-  geom_point() +
-  labs(x = "Weight", y = "Residual", title = "Residuals vs Weight") +
-  geom_hline(yintercept = 0, col = "blue", size = 1) +
-  geom_smooth(method = "lm", se = F, col = "red", linetype = "dashed")
-```
-Next, let’s plot a scatterplot of the residuals against Wrist:
-
-```{r}
-ggplot(regression.points, aes(x = Wrist, y = residual)) +
-  geom_point() +
-  labs(x = "Wrist", y = "Residual", title = "Residuals vs Wrist") +
-  geom_hline(yintercept = 0, col = "blue", size = 1) +
-  geom_smooth(method = "lm", se = F, col = "red", linetype = "dashed")
-```
-Let's take a look at the scatterplot of the residuals against Forearm:
-
-```{r}
-ggplot(regression.points, aes(x = Forearm, y = residual)) +
-  geom_point() +
-  labs(x = "Forearm", y = "Residual", title = "Residuals vs Forearm") +
-  geom_hline(yintercept = 0, col = "blue", size = 1) +
-  geom_smooth(method = "lm", se = F, col = "red", linetype = "dashed")
-```
-From the above residuals vs fitted values graphs, we observes that the residuals are randomly scattered around the zero line. This suggests that the residuals have constant variance and mean zero.
+After removing the influential point at row 39, we can find a great change in the Residuals vs Leverage plot. And from the above residuals vs fitted values graphs, we observe that the residuals are randomly scattered around the zero line. This suggests that the residuals have constant variance and mean zero.
 
 Finally, we can check if the residuals are normally distributed by producing a histogram:
 
 ```{r}
-ggplot(regression.points, aes(x = residual)) +
-  geom_histogram(color = "white") +
-  labs(x = "Residual")
+regression_points <- get_regression_points(lm_3_updated)
+
+ggplot(regression_points, aes(x = residual)) +
+  geom_histogram(aes(y = ..density..), colour = "black", fill = "skyblue") +
+  geom_density(fill = "red", alpha = .2)
+
 ```
 We can see from the above plot that the residuals are approximately consistent with a normal distribution and our data roughly fits the bell shaped curve. 
 
