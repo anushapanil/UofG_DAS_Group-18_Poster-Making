@@ -210,7 +210,3 @@ ggplot(regression_points, aes(x = residual)) +
 
 ```
 We can see from the above plot that the residuals are approximately consistent with a normal distribution and our data roughly fits the bell shaped curve. 
-
-
-
-
