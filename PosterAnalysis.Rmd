@@ -375,6 +375,19 @@ bendata <- data.frame(Abdomen=81,Weight=167,Wrist=15)
 predict(threemodel,bendata,interval="predict")
 
 
+library(infer)
+# Table with Forearm included
+get_regression_table(lm(data = bodyfat_clean, BodyFat~Weight + Abdomen + Wrist + Forearm))
+
+# Our model we have decided on!
+get_regression_table(threemodel)
+
+# Model with 4 terms, Bicep included
+get_regression_table(refined_model2)
+
+# Full model
+get_regression_table(fullmodel)
+
 ```
 
 
