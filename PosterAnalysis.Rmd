@@ -27,6 +27,22 @@ library(ggpubr)
 ```
 
 
+Data Justification:
+This dataset comprises of 252 adult men and contains their bodyfat % along with various physical measurements. These include weight, height, and the circumference of different body areas. The process of determining body fat is a time consuming and often costly process, involving a calculation based on body density which itself is determined by comparing the body weight in air and submersion in water. For this reason it would be useful to be able to estimate body fat percentage using more practical methods and measurements.
+
+Data supplied by:
+Roger W. Johnson
+Department of Mathematics & Computer Science
+South Dakota School of Mines & Technology
+
+
+
+Research Question:
+Is it possible to measure body fat percentage using practical physical measurements?
+
+
+
+
 Reading in the dataset and preliminary cleaning.
 
 ```{r bodyfat}
@@ -36,9 +52,21 @@ glimpse(bodyfat)
 head(bodyfat)
 # Adding an index column for easy manipulation
 bodyfat$Index <- 1:nrow(bodyfat)
-
+# Putting this in the first column
 bodyfat <- bodyfat %>%
   relocate(Index)
+# The data is not in tidy format so we convert by grouping the circumferences
+bodyfat_tidy <- gather(data = bodyfat,
+                   key = Body_Part,
+                   value = Circumference,
+                   Neck:Wrist)
+
+# We now have 2520 rows, however there are still only 252 (<500) observations so the data should
+# still be valid.
+glimpse(bodyfat_tidy)
+
+# Exporting to csv.
+write_csv(bodyfat_tidy,"bodyfat_tidy.csv")
 ```
 
 We first view a summary of the data
@@ -133,7 +161,7 @@ bodyfat %>%
   arrange(desc(Weight)) %>%
   select(Index,BodyFat,Weight) %>%
   slice(1:3)
-# Index 39 is the problem point for weight - this must be some sort of weightlifter
+# Index 39 is the problem point for weight - this may be some sort of weightlifter
 # With a high weight but very high lean muscle proportion
 bodyfat_clean <- bodyfat %>%
   filter(Index != 39)
@@ -142,10 +170,10 @@ bodyfat %>%
   select(Index,BodyFat,Height) %>%
   slice(1:3)
 # Index 42 is the problem point for Height - this honestly seems like it might be 
-# an error.
+# a recording error.
 bodyfat_clean <- bodyfat_clean %>%
   filter(Index != 42)
-# These top two ankles are definitely outliers
+# These top two ankles appear to be outliers
 bodyfat %>%
   arrange(desc(Ankle)) %>%
   select(Index,BodyFat,Ankle) %>%
@@ -243,7 +271,8 @@ refined_model2 <- lm(data = bodyfat_clean, BodyFat~Abdomen + Weight + Wrist + Bi
 # This achieves an Adj R^2 of 0.7365, so only losing less than half a % by dropping many variables
 # The forwards stepwise process has worked well
 summary(refined_model2)
-# We want to see what effect dropping further variables will have
+# We want to see what effect dropping further variables will have.
+# From the summary it is clear that the bicep term is the least significant, so we drop this variable
 # The model with the 3 most important parameters
 threemodel <- lm(data = bodyfat_clean, BodyFat~Abdomen + Weight + Wrist)
 summary(threemodel)
@@ -263,11 +292,13 @@ aR13 <- summary(fullmodel)$adj.r.squared
 params <- c(1,2,3,4,8,13)
 Rs <- c(R1,aR2,aR3,aR4,aR8,aR13)
 Rvalues <- tibble(params,Rs)
-Rvalues
 ggplot(data = Rvalues, aes(x = params,y = Rs)) +
   geom_col(fill = "cyan4",colour = "white") +
   labs(x = "Number of parameters in linear model",y = "R^2 or Adj R^2 value of model") +
   ylim(0,1)
+# Furthermore, the 95% confidence interval of the Bicep parameter contains 0, so we were
+# right to remove this variable from the model.
+get_regression_table(refined_model2)
 ```
 
 
@@ -276,10 +307,7 @@ The model with three parameters seems to be the best as the Adj R^2 value is onl
 
 Model LaTeX code:
 $$
-
 \widehat{Bodyfat_i} = \widehat{\alpha} + \widehat{\beta}_1 \cdot Abdomen_i + \widehat{\beta}_2 \cdot Weight_i + \widehat{\beta}_3 \cdot Wrist_i
-
-
 $$
 
 Where:
@@ -291,7 +319,6 @@ $$
 &\bullet \quad \widehat{\beta}_1 \cdot Abdomen_i ,&& \text{ is the first parameter, multiplied by the abdomen circumference (cm) of man } i,\\
 &\bullet \quad \widehat{\beta}_2 \cdot Weight_i ,&& \text{ is the second parameter multiplied by the weight (lbs) of man } i,\\
 &\bullet \quad \widehat{\beta}_3 \cdot Wrist_i ,&& \text{ is the third parameter multiplied by the wrist circumference (cm) of man } i
-
 \end{align*}
 $$
 
