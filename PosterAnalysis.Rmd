@@ -2,7 +2,7 @@
 title: "Analysis"
 author: "Group 18"
 date: "30/06/2021"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -51,6 +51,7 @@ bodyfat %>%
   kable(col.names = c("Variable", "n", "Mean", "SD", "Q1", "Median", "Q3"), digits = 2) %>%
   kable_styling(latex_options = "scale_down") %>%
   kable_styling(latex_options = "hold_position")
+
 ```
 
 
@@ -67,57 +68,57 @@ Abdomen looks promising - however it looks like there may be some outliers relat
 
 ```{r plots}
 p1 <- ggplot(bodyfat, aes(x = Age, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Age", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p2 <- ggplot(bodyfat, aes(x = Weight, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Weight", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p3 <- ggplot(bodyfat, aes(x = Height, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Height", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p4 <- ggplot(bodyfat, aes(x = Neck, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Neck", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p5 <- ggplot(bodyfat, aes(x = Chest, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Chest", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p6 <- ggplot(bodyfat, aes(x = Abdomen, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Abdomen", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p7 <- ggplot(bodyfat, aes(x = Hip, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Hip", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p8 <- ggplot(bodyfat, aes(x = Thigh, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Thigh", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p9 <- ggplot(bodyfat, aes(x = Knee, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Knee", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p10 <- ggplot(bodyfat, aes(x = Ankle, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Ankle", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p11 <- ggplot(bodyfat, aes(x = Biceps, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Biceps", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p12 <- ggplot(bodyfat, aes(x = Forearm, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Forearm", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 p13 <- ggplot(bodyfat, aes(x = Wrist, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Wrist", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 # It looks like there are some particular outliers
 grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, nrow = 4)
 grid.arrange(p2,p3)
@@ -157,57 +158,57 @@ We can now plot again to see if this has had the desired effect of providing a c
 
 ```{r plots2}
 pc1 <- ggplot(bodyfat_clean, aes(x = Age, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Age", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc2 <- ggplot(bodyfat_clean, aes(x = Weight, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Weight", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc3 <- ggplot(bodyfat_clean, aes(x = Height, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Height", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc4 <- ggplot(bodyfat_clean, aes(x = Neck, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Neck", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc5 <- ggplot(bodyfat_clean, aes(x = Chest, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Chest", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc6 <- ggplot(bodyfat_clean, aes(x = Abdomen, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Abdomen", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc7 <- ggplot(bodyfat_clean, aes(x = Hip, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Hip", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc8 <- ggplot(bodyfat_clean, aes(x = Thigh, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Thigh", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc9 <- ggplot(bodyfat_clean, aes(x = Knee, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Knee", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc10 <- ggplot(bodyfat_clean, aes(x = Ankle, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Ankle", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc11 <- ggplot(bodyfat_clean, aes(x = Biceps, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Biceps", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc12 <- ggplot(bodyfat_clean, aes(x = Forearm, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Forearm", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 pc13 <- ggplot(bodyfat_clean, aes(x = Wrist, y = BodyFat)) +
-  geom_point() +
+  geom_point(color = "#2A638B") +
   labs(x = "Wrist", y = "Body Fat") +
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F, color = "#EB442C")
 grid.arrange(pc1, pc2, pc3, pc4, pc5, pc6, pc7, pc8, pc9, pc10, pc11, pc12, pc13, nrow = 4)
 ```
 
@@ -292,10 +293,10 @@ We have fit a linear model to predict bodyfat % in adult men using only 3 predic
 
 
 ```{r pred}
-# My measurements
-bendata <- data.frame(Abdomen=81,Weight=167,Wrist=15)
-# Predicts me to have bodyfat ~14% albeit with a wide interval 
-predict(threemodel,bendata,interval="predict")
+# Random measurements
+dummydata <- data.frame(Abdomen=81,Weight=167,Wrist=15)
+# Predicts the person to have bodyfat ~14% albeit with a wide interval 
+predict(threemodel,dummydata,interval="predict")
 library(infer)
 # Table with Forearm included
 get_regression_table(lm(data = bodyfat_clean, BodyFat~Weight + Abdomen + Wrist + Forearm))
