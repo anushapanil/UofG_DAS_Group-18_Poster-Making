@@ -41,7 +41,7 @@ head(bodyfat)
 # Adding an index column for easy manipulation
 bodyfat$Index <- 1:nrow(bodyfat)
 
-# Putting the Index column first
+# Putting the Index column first2
 bodyfat <- bodyfat %>%
   relocate(Index)
 
@@ -341,7 +341,32 @@ ggplot(data = Rvalues, aes(x = params,y = Rs)) +
 
 ```
 
+
+
 The model with three parameters seems to be the best as the Adj R^2 value is only 0.0026 smaller than that of the four parameter model.
+
+Model LaTeX code:
+$$
+
+\widehat{Bodyfat_i} = \widehat{\alpha} + \widehat{\beta}_1 \cdot Abdomen_i + \widehat{\beta}_2 \cdot Weight_i + \widehat{\beta}_3 \cdot Wrist_i
+
+
+$$
+
+Where:
+
+$$
+\begin{align*}
+&\bullet \quad \widehat{Bodyfat_i},&& \text{ is the estimated bodyfat percentage of man } i, \\
+&\bullet \quad \widehat{\alpha} ,&& \text{ is the intercept term}, \\
+&\bullet \quad \widehat{\beta}_1 \cdot Abdomen_i ,&& \text{ is the first parameter, multiplied by the abdomen circumference (cm) of man } i,\\
+&\bullet \quad \widehat{\beta}_2 \cdot Weight_i ,&& \text{ is the second parameter multiplied by the weight (lbs) of man } i,\\
+&\bullet \quad \widehat{\beta}_3 \cdot Wrist_i ,&& \text{ is the third parameter multiplied by the wrist circumference (cm) of man } i
+
+\end{align*}
+$$
+
+
 
 We now want to test our model assumptions by looking at the residual plots
 
